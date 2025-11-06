@@ -23,7 +23,7 @@ public class TypeServiceTest {
     private TypeService typeService;
 
     /**
-     *
+     * Buscar tipo por ID
      */
     @Test
     public void testFindTypeById() {
@@ -46,7 +46,7 @@ public class TypeServiceTest {
     }
 
     /**
-     *
+     * Buscar tipo por nombre
      */
     @Test
     public void testFindTypeByName() {
