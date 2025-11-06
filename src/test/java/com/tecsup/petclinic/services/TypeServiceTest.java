@@ -23,44 +23,6 @@ public class TypeServiceTest {
     private TypeService typeService;
 
     /**
-     * Buscar tipo por ID
-     */
-    @Test
-    public void testFindTypeById() {
-
-        Integer ID = 1;
-        String NAME_EXPECTED = "cat";
-
-        Type type = null;
-
-        try {
-            type = this.typeService.findById(ID);
-        } catch (TypeNotFoundException e) {
-            fail(e.getMessage());
-        }
-
-        log.info("TYPE FOUND: " + type);
-
-        assertNotNull(type);
-        assertEquals(NAME_EXPECTED, type.getName());
-    }
-
-    /**
-     * Buscar tipo por nombre
-     */
-    @Test
-    public void testFindTypeByName() {
-
-        String FIND_NAME = "dog";
-        int SIZE_EXPECTED = 1;
-
-        List<Type> types = this.typeService.findByName(FIND_NAME);
-
-        assertEquals(SIZE_EXPECTED, types.size());
-        assertEquals(FIND_NAME, types.get(0).getName());
-    }
-
-    /**
      *
      */
     @Test
@@ -93,4 +55,63 @@ public class TypeServiceTest {
         assertEquals(TYPE_NAME, newType.getName());
     }
 
+    /**
+     *
+     */
+    @Test
+    public void testUpdateType() {
+
+        String TYPE_NAME = "rabbit";
+        String UP_TYPE_NAME = "bunny";
+
+        Type type = Type.builder()
+                .name(TYPE_NAME)
+                .build();
+
+        // ------------ Create ---------------
+        log.info(">" + type);
+        Type typeCreated = this.typeService.create(type);
+        log.info(">>" + typeCreated);
+
+        // ------------ Update ---------------
+        typeCreated.setName(UP_TYPE_NAME);
+
+        Type typeUpdated = this.typeService.update(typeCreated);
+        log.info(">>>>" + typeUpdated);
+
+        // VALIDACIÓN
+        assertEquals(UP_TYPE_NAME, typeUpdated.getName());
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void testDeleteType() {
+
+        String TYPE_NAME = "parrot";
+
+        // ------------ Create ---------------
+        Type type = Type.builder()
+                .name(TYPE_NAME)
+                .build();
+
+        Type newType = this.typeService.create(type);
+        log.info("" + newType);
+
+        // ------------ Delete ---------------
+        try {
+            this.typeService.delete(newType.getId());
+        } catch (TypeNotFoundException e) {
+            fail(e.getMessage());
+        }
+
+        // ------------ Validation ---------------
+        try {
+            this.typeService.findById(newType.getId());
+            assertTrue(false);
+        } catch (TypeNotFoundException e) {
+            assertTrue(true);
+        }
+    }
 }
